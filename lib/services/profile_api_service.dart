@@ -15,7 +15,7 @@ class ProfileApiService {
   }) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/update_profile.php'),
+        Uri.parse('$baseUrl/update_current_profile.php'),
         body: {
           'id': id.toString(),
           'fullname': fullname,

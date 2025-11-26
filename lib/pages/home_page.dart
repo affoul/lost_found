@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => ProfilePage(
+                      id: currentUser!['id'], // CORRECTION: Passer l'ID
                       fullname: currentUser!['fullname'] ?? '',
                       email: currentUser!['email'] ?? '',
                       telephone: currentUser!['telephone'] ?? '',

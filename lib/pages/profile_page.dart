@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'edit_profile_page.dart';
 
-
 class ProfilePage extends StatelessWidget {
+  final int id; // AJOUT: ID de l'utilisateur
   final String fullname;
   final String email;
   final String telephone;
@@ -11,6 +11,7 @@ class ProfilePage extends StatelessWidget {
 
   const ProfilePage({
     super.key,
+    required this.id, // AJOUT: ID requis
     required this.fullname,
     required this.email,
     required this.telephone,
@@ -42,6 +43,7 @@ class ProfilePage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditProfilePage(
+                    id: id, // CORRECTION: Passer l'ID
                     fullname: fullname,
                     email: email,
                     telephone: telephone,
@@ -314,6 +316,7 @@ class ProfilePage extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => EditProfilePage(
+              id: id, // CORRECTION: Passer l'ID
               fullname: fullname,
               email: email,
               telephone: telephone,
@@ -443,206 +446,5 @@ class ProfilePage extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-// Page de modification du profil (à créer dans un fichier séparé edit_profile_page.dart)
-class EditProfilePage extends StatefulWidget {
-  final String fullname;
-  final String email;
-  final String telephone;
-  final String filiere;
-  final String niveau;
-
-  const EditProfilePage({
-    super.key,
-    required this.fullname,
-    required this.email,
-    required this.telephone,
-    required this.filiere,
-    required this.niveau,
-  });
-
-  @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
-}
-
-class _EditProfilePageState extends State<EditProfilePage> {
-  final _formKey = GlobalKey<FormState>();
-  late TextEditingController _fullnameController;
-  late TextEditingController _emailController;
-  late TextEditingController _telephoneController;
-  late TextEditingController _filiereController;
-  late TextEditingController _niveauController;
-
-  @override
-  void initState() {
-    super.initState();
-    _fullnameController = TextEditingController(text: widget.fullname);
-    _emailController = TextEditingController(text: widget.email);
-    _telephoneController = TextEditingController(text: widget.telephone);
-    _filiereController = TextEditingController(text: widget.filiere);
-    _niveauController = TextEditingController(text: widget.niveau);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Modifier le profil'),
-        backgroundColor: const Color(0xFF1A4D8C),
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveProfile,
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              _buildEditField(
-                controller: _fullnameController,
-                label: 'Nom complet',
-                icon: Icons.person_outline,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre nom complet';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildEditField(
-                controller: _emailController,
-                label: 'Adresse email',
-                icon: Icons.email_outlined,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Email invalide';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildEditField(
-                controller: _telephoneController,
-                label: 'Téléphone',
-                icon: Icons.phone_iphone_outlined,
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre numéro de téléphone';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildEditField(
-                controller: _filiereController,
-                label: 'Filière',
-                icon: Icons.school_outlined,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre filière';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _buildEditField(
-                controller: _niveauController,
-                label: 'Niveau',
-                icon: Icons.grade_outlined,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer votre niveau';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2E7D32),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Sauvegarder les modifications',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildEditField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    required String? Function(String?) validator,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: const Color(0xFF1A4D8C)),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.grey),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF1A4D8C), width: 2),
-        ),
-      ),
-      validator: validator,
-    );
-  }
-
-  void _saveProfile() {
-    if (_formKey.currentState!.validate()) {
-      // Ici vous ajouterez la logique pour sauvegarder les modifications
-      // Par exemple, appeler une API pour mettre à jour le profil
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Profil mis à jour avec succès'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      
-      Navigator.pop(context);
-    }
-  }
-
-  @override
-  void dispose() {
-    _fullnameController.dispose();
-    _emailController.dispose();
-    _telephoneController.dispose();
-    _filiereController.dispose();
-    _niveauController.dispose();
-    super.dispose();
   }
 }

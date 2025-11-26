@@ -79,7 +79,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    // Section Informations Personnelles
                     _buildSectionTitle('Informations Personnelles'),
                     const SizedBox(height: 16),
                     
@@ -125,7 +124,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       },
                     ),
 
-                    // Section Informations Académiques
                     const SizedBox(height: 24),
                     _buildSectionTitle('Informations Académiques'),
                     const SizedBox(height: 16),
@@ -155,7 +153,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       },
                     ),
 
-                    // Section Sécurité (Mot de passe)
                     const SizedBox(height: 24),
                     _buildSectionTitle('Sécurité'),
                     const SizedBox(height: 16),
@@ -188,7 +185,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                     ),
 
-                    // Bouton de sauvegarde
                     const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
@@ -332,7 +328,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Vérification du mot de passe actuel
     if (_currentPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
