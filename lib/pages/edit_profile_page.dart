@@ -360,7 +360,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.pop(context);
+      
+      // Retourner les nouvelles données
+      Navigator.pop(context, {
+        'id': widget.id,
+        'fullname': _fullnameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'telephone': _telephoneController.text.trim(),
+        'filiere': _filiereController.text.trim(),
+        'niveau': _niveauController.text.trim(),
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

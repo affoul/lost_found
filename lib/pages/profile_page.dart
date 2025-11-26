@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'edit_profile_page.dart';
 
-class ProfilePage extends StatelessWidget {
-  final int id; // AJOUT: ID de l'utilisateur
+class ProfilePage extends StatefulWidget {
+  final int id;
   final String fullname;
   final String email;
   final String telephone;
@@ -11,13 +11,34 @@ class ProfilePage extends StatelessWidget {
 
   const ProfilePage({
     super.key,
-    required this.id, // AJOUT: ID requis
+    required this.id,
     required this.fullname,
     required this.email,
     required this.telephone,
     required this.filiere,
     required this.niveau,
   });
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late String _fullname;
+  late String _email;
+  late String _telephone;
+  late String _filiere;
+  late String _niveau;
+
+  @override
+  void initState() {
+    super.initState();
+    _fullname = widget.fullname;
+    _email = widget.email;
+    _telephone = widget.telephone;
+    _filiere = widget.filiere;
+    _niveau = widget.niveau;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +59,7 @@ class ProfilePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditProfilePage(
-                    id: id, // CORRECTION: Passer l'ID
-                    fullname: fullname,
-                    email: email,
-                    telephone: telephone,
-                    filiere: filiere,
-                    niveau: niveau,
-                  ),
-                ),
-              );
-            },
+            onPressed: _navigateToEditProfile,
           ),
         ],
       ),
@@ -62,9 +69,9 @@ class ProfilePage extends StatelessWidget {
           children: [
             _buildProfileHeader(),
             const SizedBox(height: 24),
-            _buildInfoSection(context),
+            _buildInfoSection(),
             const SizedBox(height: 24),
-            _buildAcademicSection(context),
+            _buildAcademicSection(),
             const SizedBox(height: 32),
           ],
         ),
@@ -72,9 +79,35 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  Future<void> _navigateToEditProfile() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfilePage(
+          id: widget.id,
+          fullname: _fullname,
+          email: _email,
+          telephone: _telephone,
+          filiere: _filiere,
+          niveau: _niveau,
+        ),
+      ),
+    );
+
+    if (result != null && mounted) {
+      setState(() {
+        _fullname = result['fullname'];
+        _email = result['email'];
+        _telephone = result['telephone'];
+        _filiere = result['filiere'];
+        _niveau = result['niveau'];
+      });
+    }
+  }
+
   Widget _buildProfileHeader() {
-    String displayName = fullname.isNotEmpty ? fullname : 'Étudiant ISET';
-    String displayEmail = email.isNotEmpty ? email : 'Email non disponible';
+    String displayName = _fullname.isNotEmpty ? _fullname : 'Étudiant ISET';
+    String displayEmail = _email.isNotEmpty ? _email : 'Email non disponible';
 
     return Container(
       height: 220,
@@ -188,7 +221,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoSection(BuildContext context) {
+  Widget _buildInfoSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -198,28 +231,28 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildSectionTitle('Informations Personnelles'),
-              _buildEditButton(context, 'Modifier les informations personnelles'),
+              _buildEditButton('Modifier les informations personnelles'),
             ],
           ),
           const SizedBox(height: 16),
           _buildInfoCard(
             icon: Icons.person_outline,
             title: 'Nom complet',
-            value: fullname.isNotEmpty ? fullname : 'Non renseigné',
+            value: _fullname.isNotEmpty ? _fullname : 'Non renseigné',
             color: const Color(0xFF1A4D8C),
           ),
           const SizedBox(height: 12),
           _buildInfoCard(
             icon: Icons.email_outlined,
             title: 'Adresse email',
-            value: email.isNotEmpty ? email : 'Non renseigné',
+            value: _email.isNotEmpty ? _email : 'Non renseigné',
             color: const Color(0xFF2E7D32),
           ),
           const SizedBox(height: 12),
           _buildInfoCard(
             icon: Icons.phone_iphone_outlined,
             title: 'Téléphone',
-            value: telephone.isNotEmpty ? telephone : 'Non renseigné',
+            value: _telephone.isNotEmpty ? _telephone : 'Non renseigné',
             color: const Color(0xFFD32F2F),
           ),
         ],
@@ -227,7 +260,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAcademicSection(BuildContext context) {
+  Widget _buildAcademicSection() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -237,7 +270,7 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildSectionTitle('Informations Académiques'),
-              _buildEditButton(context, 'Modifier les informations académiques'),
+              _buildEditButton('Modifier les informations académiques'),
             ],
           ),
           const SizedBox(height: 16),
@@ -261,7 +294,7 @@ class ProfilePage extends StatelessWidget {
                   _buildAcademicItem(
                     icon: Icons.school_outlined,
                     title: 'Filière',
-                    value: filiere.isNotEmpty ? filiere : 'Non définie',
+                    value: _filiere.isNotEmpty ? _filiere : 'Non définie',
                   ),
                   const SizedBox(height: 16),
                   Container(
@@ -272,7 +305,7 @@ class ProfilePage extends StatelessWidget {
                   _buildAcademicItem(
                     icon: Icons.grade_outlined,
                     title: 'Niveau d\'étude',
-                    value: niveau.isNotEmpty ? niveau : 'Non défini',
+                    value: _niveau.isNotEmpty ? _niveau : 'Non défini',
                   ),
                 ],
               ),
@@ -297,7 +330,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildEditButton(BuildContext context, String tooltip) {
+  Widget _buildEditButton(String tooltip) {
     return IconButton(
       icon: Container(
         padding: const EdgeInsets.all(6),
@@ -311,21 +344,7 @@ class ProfilePage extends StatelessWidget {
           color: Color(0xFF1A4D8C),
         ),
       ),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditProfilePage(
-              id: id, // CORRECTION: Passer l'ID
-              fullname: fullname,
-              email: email,
-              telephone: telephone,
-              filiere: filiere,
-              niveau: niveau,
-            ),
-          ),
-        );
-      },
+      onPressed: _navigateToEditProfile,
       tooltip: tooltip,
     );
   }

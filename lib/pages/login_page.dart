@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
               
               const SizedBox(height: 40),
               
-              // Titre
+              // Titre avec description de la plateforme
               const Text(
                 'Connexion Étudiant',
                 style: TextStyle(
@@ -46,11 +46,24 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 8),
               
               const Text(
-                'Accédez à votre espace personnel',
+                'Plateforme Lost & Found ISET Kairouan',
                 style: TextStyle(
                   fontSize: 16,
+                  color: Color(0xFF2E7D32),
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              
+              const SizedBox(height: 4),
+              
+              const Text(
+                'Retrouvez vos objets perdus en toute simplicité',
+                style: TextStyle(
+                  fontSize: 14,
                   color: Colors.grey,
                 ),
+                textAlign: TextAlign.center,
               ),
               
               const SizedBox(height: 32),
@@ -72,14 +85,33 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLogoSection() {
     return Column(
       children: [
-        Image.asset(
-          'assets/images/logo.png',
-          width: 120,
-          height: 120,
+        // Logo avec badge Lost & Found
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              width: 120,
+              height: 120,
+            ),
+            Positioned(
+              bottom: -5,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2E7D32),
+                  borderRadius: BorderRadius.circular(12),
+          
+                ),
+              ),
+            ),
+          ],
         ),
+        
         const SizedBox(height: 16),
+        
         const Text(
-          'ISET CAMPUS',
+          'ISET KAIROUAN',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -87,13 +119,68 @@ class _LoginPageState extends State<LoginPage> {
             letterSpacing: 1.5,
           ),
         ),
+        
         const SizedBox(height: 4),
+        
         const Text(
-          'Portail Étudiant',
+          'Plateforme Lost & Found',
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey,
-            fontWeight: FontWeight.w500,
+            color: Color(0xFF2E7D32),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        
+        const SizedBox(height: 8),
+        
+        // Description de la plateforme
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFE8F5E8),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: const Color(0xFF2E7D32).withOpacity(0.3),
+            ),
+          ),
+          child: const Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.find_in_page, size: 16, color: Color(0xFF2E7D32)), // CORRECTION: Icône existante
+                  SizedBox(width: 8),
+                  Text(
+                    'Objets Perdus',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF2E7D32),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Icon(Icons.search, size: 16, color: Color(0xFF1A4D8C)),
+                  SizedBox(width: 8),
+                  Text(
+                    'Objets Trouvés',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF1A4D8C),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Déclarez et recherchez vos objets perdus dans l\'enceinte de l\'ISET',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ],
@@ -120,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
             child: TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: 'Email universitaire',
                 labelStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: const Icon(Icons.email, color: Color(0xFF1A4D8C)),
                 filled: true,
@@ -138,6 +225,8 @@ class _LoginPageState extends State<LoginPage> {
                   borderSide: const BorderSide(color: Color(0xFF1A4D8C), width: 2),
                 ),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                hintText: 'prenom.nom@isetk.rnu.tn',
+                hintStyle: const TextStyle(fontSize: 12),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) return "Veuillez entrer votre email";
@@ -251,7 +340,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     child: const Text(
-                      "Se connecter",
+                      "Se connecter à Lost & Found",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -298,7 +387,7 @@ class _LoginPageState extends State<LoginPage> {
         Divider(color: Colors.grey),
         SizedBox(height: 16),
         Text(
-          '© 2024 ISET Campus - Tous droits réservés',
+          '© 2024 ISET Kairouan - Plateforme Lost & Found',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,
@@ -306,7 +395,15 @@ class _LoginPageState extends State<LoginPage> {
         ),
         SizedBox(height: 4),
         Text(
-          'Version Étudiant 2.0.0',
+          'Service dédié aux étudiants de l\'ISET Kairouan',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          'Version 2.0.0',
           style: TextStyle(
             color: Colors.grey,
             fontSize: 10,
@@ -331,7 +428,7 @@ class _LoginPageState extends State<LoginPage> {
     if (response['status'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Connexion réussie"),
+          content: Text("Connexion réussie à Lost & Found"),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
         ),
@@ -362,8 +459,22 @@ class _LoginPageState extends State<LoginPage> {
           'Mot de passe oublié',
           style: TextStyle(color: Color(0xFF1A4D8C)),
         ),
-        content: const Text(
-          'Entrez votre email pour réinitialiser votre mot de passe. Un lien vous sera envoyé.',
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Plateforme Lost & Found ISET Kairouan',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2E7D32),
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Entrez votre email universitaire pour réinitialiser votre mot de passe. Un lien vous sera envoyé.',
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -375,7 +486,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Instructions envoyées à votre email'),
+                  content: Text('Instructions envoyées à votre email universitaire'),
                   backgroundColor: Colors.green,
                 ),
               );

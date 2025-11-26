@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Accueil'),
+        title: const Text('Accueil ISET'),
         backgroundColor: const Color(0xFF1A4D8C),
         foregroundColor: Colors.white,
       ),
@@ -48,17 +48,137 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: isLoading
             ? const CircularProgressIndicator()
-            : Text(
-                currentUser != null
-                    ? 'Bienvenue, ${currentUser!['fullname']} !'
-                    : errorMessage,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1A4D8C),
+            : _buildWelcomeMessage(),
+      ),
+    );
+  }
+
+  Widget _buildWelcomeMessage() {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Icône de bienvenue
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A4D8C),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blue.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
                 ),
-                textAlign: TextAlign.center,
+              ],
+            ),
+            child: const Icon(
+              Icons.school,
+              size: 60,
+              color: Colors.white,
+            ),
+          ),
+          
+          const SizedBox(height: 32),
+          
+          // Message de bienvenue principal
+          Text(
+            'Bienvenue sur',
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          
+          const SizedBox(height: 8),
+          
+          const Text(
+            'ISET CAMPUS',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1A4D8C),
+              letterSpacing: 1.5,
+            ),
+          ),
+          
+          const SizedBox(height: 16),
+          
+          // Sous-titre
+          const Text(
+            'Votre plateforme étudiante',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
+          ),
+          
+          const SizedBox(height: 32),
+          
+          // Message personnalisé
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.emoji_events,
+                    size: 40,
+                    color: Color(0xFF2E7D32),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    isLoading 
+                        ? 'Chargement de votre profil...'
+                        : currentUser != null
+                            ? 'Heureux de vous revoir, ${currentUser!['fullname']}!'
+                            : 'Bienvenue dans votre espace personnel!',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF1A4D8C),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Utilisez le menu de navigation pour explorer les fonctionnalités',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
+            ),
+          ),
+          
+          const SizedBox(height: 32),
+          
+          // Indication pour le menu
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.menu, color: Color(0xFF1A4D8C)),
+              SizedBox(width: 8),
+              Text(
+                'Ouvrez le menu pour naviguer',
+                style: TextStyle(
+                  color: Color(0xFF1A4D8C),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -93,14 +213,17 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             leading: const Icon(Icons.person, color: Color(0xFF1A4D8C)),
             title: const Text('Profil'),
-            onTap: () {
+            onTap: () async {
               Navigator.pop(context);
+              // Recharger les données avant d'ouvrir le profil
+              await _loadCurrentUser();
+              
               if (currentUser != null) {
-                Navigator.push(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => ProfilePage(
-                      id: currentUser!['id'], // CORRECTION: Passer l'ID
+                      id: currentUser!['id'],
                       fullname: currentUser!['fullname'] ?? '',
                       email: currentUser!['email'] ?? '',
                       telephone: currentUser!['telephone'] ?? '',
@@ -109,6 +232,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 );
+                // Rafraîchir les données après retour du profil
+                await _loadCurrentUser();
               }
             },
           ),
