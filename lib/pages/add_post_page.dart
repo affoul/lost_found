@@ -56,7 +56,7 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   // --------------------------
-  // Publication - VERSION CORRIGÉE AVEC DEBUG
+  // Publication - 
   // --------------------------
   Future<void> submitPost() async {
     if (!_formKey.currentState!.validate()) {
@@ -78,17 +78,7 @@ class _AddPostPageState extends State<AddPostPage> {
       _isLoading = true;
     });
 
-    print("🔄 === DÉBUT DE LA PUBLICATION ===");
-    print("📱 Données à envoyer:");
-    print("   - userId: ${widget.userId}");
-    print("   - title: $title");
-    print("   - description: $description");
-    print("   - category: $category");
-    print("   - postType: $postType");
-    print("   - location: $location");
-    print("   - dateLostFound: ${dateLostFound != null ? DateFormat("yyyy-MM-dd").format(dateLostFound!) : ""}");
-    print("   - image: ${_selectedImage!.path}");
-
+  
     try {
       // Test de connexion d'abord
       print("🔍 Test de connexion...");
